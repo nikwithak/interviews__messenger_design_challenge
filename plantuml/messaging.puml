@@ -1,0 +1,78 @@
+@startuml
+title: Messaging: Connection Flow
+hide unlinked
+actor User
+boundary Gateway
+entity AuthorizationService
+collections MessageService
+collections MessageHandler
+entity RedisCache
+entity RedisMQ
+database MessageDB
+collections ListService
+collections BillingService
+
+note right User: NB: `User` can be either a Member or a Creator
+User -> Gateway: Connect Request
+Gateway -> AuthorizationService: Authorize Request
+AuthorizationService -> Gateway: Authorized
+Gateway -> MessageService : 
+MessageService -> User: Open Websocket Connection
+MessageService -> RedisCache: Add UserId/ServerId Pairing
+MessageService -> MessageDB: Get recent messages
+MessageDB -> MessageService
+MessageService -> User: recent messages
+group Disconnect Flow
+    MessageService -> User: Connection Disconnects / Times Out
+    MessageService -> RedisCache: Remove UserId/ServerId Pairing
+end
+
+newpage Sending Messages
+User -> MessageService: Message {\n\
+  sender_id (from authz),\n\
+  recipient_id,\n\
+  recipient_type,\n\
+  message,\n\
+}
+note right User: Via open websocket connection.\n\
+Message could also be sent via\n\
+an HTTP POST endpoint, through the Gateway.
+alt recipient_type == 'group'
+   MessageService -> ListService: Get lists for creator
+   ListService -> MessageService
+   MessageService -> MessageService: Verify list exists for creator
+   alt List Is Invalid OR user is not a Creator
+     MessageService -> User: Error
+   end
+else
+   MessageService -> MessageService: Verify recipient exists
+end
+MessageService -> RedisMQ: Add Message to Queue
+MessageService -> User: OK
+group async loop
+   RedisMQ -> MessageHandler: Next Message
+   alt recipient_type == 'group'
+     MessageHandler -> ListService: Get list of recipients for group
+     ListService -> MessageHandler
+   end
+   loop For each recipient
+   MessageHandler -> MessageDB: Lookup if recipient has blocked sender
+   MessageDB -> MessageHandler
+   alt If not blocked
+   MessageHandler -> MessageDB: Save message
+   MessageHandler -> RedisCache: Get Active Connections for recipient
+   RedisCache -> MessageHandler
+   loop For each open Connection
+      note left MessageHandler: Sent to the specific\nserver instance
+      MessageHandler -> MessageService: message
+      MessageService -> User: Notify recipient via websocket
+      note right User: This is a different user than initiated the flow, via open websocket
+   end
+   end
+   end
+end
+
+
+newpage Tipping
+creator -> User: jsdif
+@enduml
