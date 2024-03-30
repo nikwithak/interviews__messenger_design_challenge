@@ -1,3 +1,25 @@
+# Real-time Messenger Design Challenge
+
+## Context
+
+In 2024, a recruiter reached out from a company that operates a live-streaming
+video site, similar to Twitch. I applied for their Principal Engineer role, and
+was asked to complete the following design challenge, spending no more than a
+couple of hours on it.
+
+To protect the integrity of their hiring processes, the company has asked not to
+be identified.
+
+I was asked to complete a virtual interview loop consisting of four one-hour
+interviews, each with two members of the team. I was offered and subsequently
+declined the position.
+
+This repository is made public under the MIT license for educational purposes.
+
+Final Output: [PDF](design_proposal.pdf) [Markdown](design_proposal.md)
+
+---
+
 # Design Proposal: Messenger Feature
 
 This design outlines an approach for a chat application supporting real time and
@@ -142,3 +164,76 @@ represented in diagram)
   large groups.
 
 [Copyright Nik Gilmore 2024 All Rights Reserved]
+
+---
+
+## Feedback
+
+I received the following feedback from the recruiter:
+
+    **DESIGN CHALLENGE FEEDBACK**: (Please note that you received amazing feedback,
+    but I wanted to share a few things that were mentioned just in case it is
+    helpful! Also, I wanted to note that the two individuals who reviewed your
+    design challenge will not be a part of your interview loop)
+
+    - Minor - Database design would have been nice; it was vaguely described in the
+      text.
+
+    - Minor - Timeout handling, failure management, scaling and monitoring could
+      have been mentioned. These could be discussed on the interview.
+
+    - Minor - The solution can be good enough for simple use cases, but it is not
+      scalable enough. With this design approach, user connections for the same
+      group are spread across nodes, so every message has to be delivered to every
+      Messaging Service node before being sent to the individual recipients. In the
+      case of a high user/message count, those nodes could be easily overloaded.
+
+    - Minor - A better approach would be to use a consistent hash ring when
+      selecting where the user connections are being routed. This way, the
+      connections that have to talk to each other could be routed to the same node,
+      and the message would never have to leave that node.
+
+    Initiating a Connection:
+
+    - Request forwarding: Will the WebSocket connection be proxied through the API
+      Gateway, or will the user directly connect to the Messaging Service? Both
+      approaches have their pros and cons.
+
+    Sending messages:
+
+    - If recipient_type == "group", we should check if the user is a creator before
+      retrieving the lists
+
+    Offline messaging:
+
+    - An index is missing on recipient_type • Why do we save the message for each
+      user instead of just saving it once using the group id? Messages from blocked
+      users could be filtered out before delivery.
+
+    Tipping:
+
+    - The first part of the sequence diagram makes it clear that each group belongs
+      to exactly one creator. Why are we attempting to process the payment for each
+      user in the group instead of simply attempting to process it once using the
+      creator ID?
+
+## LICENSE
+
+Copyright 2024 Nik Gilmore
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the “Software”), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
