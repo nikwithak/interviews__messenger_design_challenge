@@ -4,8 +4,8 @@
 
 In 2024, a recruiter reached out from a company that operates a live-streaming
 video site, similar to Twitch. I applied for their Principal Engineer role, and
-was asked to complete the following design challenge, spending no more than a
-couple of hours on it.
+was asked to complete the following design challenge within 24 hours, spending
+no more than a couple of hours on it.
 
 To protect the integrity of their hiring processes, the company has asked not to
 be identified.
@@ -169,12 +169,15 @@ represented in diagram)
 
 ## Feedback
 
-I received the following feedback from the recruiter:
+I received the following feedback from the recruiter. I won't respond to every
+individual note, suffice to say that this document was created from scratch, for
+free, and in a limited, short time window. It has not been updated since it was
+initially submitted.
 
-    **DESIGN CHALLENGE FEEDBACK**: (Please note that you received amazing feedback,
+    Please note that you received amazing feedback,
     but I wanted to share a few things that were mentioned just in case it is
     helpful! Also, I wanted to note that the two individuals who reviewed your
-    design challenge will not be a part of your interview loop)
+    design challenge will not be a part of your interview loop
 
     - Minor - Database design would have been nice; it was vaguely described in the
       text.
