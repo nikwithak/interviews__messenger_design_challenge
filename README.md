@@ -10,9 +10,9 @@ no more than a couple of hours on it.
 To protect the integrity of their hiring processes, the company has asked not to
 be identified.
 
-I was asked to complete a virtual interview loop consisting of four one-hour
-interviews, each with two members of the team. I was offered and subsequently
-declined the position.
+After submitting this document, I was asked to complete a virtual interview loop
+consisting of four one-hour interviews, each with two members of the team. I was
+offered the position and declined.
 
 This repository is made public under the MIT license for educational purposes.
 
@@ -169,10 +169,12 @@ represented in diagram)
 
 ## Feedback
 
-I received the following feedback from the recruiter. I won't respond to every
-individual note, suffice to say that this document was created from scratch, for
-free, and in a limited, short time window. It has not been updated since it was
-initially submitted.
+I received the following feedback from the recruiter. I haven't responded to the
+feedback, but agree with many of the points made. Please understand that this
+project was done with a restricted time window, and was done in my personal free
+time. It is a first draft, and I would have had the opportunity to address these
+concerns in a real-world situation involving team discussions and an iterative
+process.
 
     Please note that you received amazing feedback,
     but I wanted to share a few things that were mentioned just in case it is
